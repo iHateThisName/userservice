@@ -19,7 +19,7 @@ import java.util.Objects;
 // @Setter is lombok that creates setters.
 // @NoArgsConstructor is lombok and creates a constructor with no argument.
 // @AllArgsConstructor is lombok and creates a constructor with all the argument.
-@Entity
+@Entity(name = "roles")
 @Getter
 @Setter
 @NoArgsConstructor

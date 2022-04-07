@@ -1,22 +1,26 @@
 package no.ntnu.userservice.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * @author "https://github.com/iHateThisName"
  * @version 1.0
  */
 // @Entity is to tell spring boot that this class is entity in the db.
-// @Data is lombok dependency that creates getter and setters.
+// @Getter is lombok dependency that creates getters.
+// @Setter is lombok that creates setters.
 // @NoArgsConstructor is lombok and creates a constructor with no argument.
 // @AllArgsConstructor is lombok and creates a constructor with all the argument.
-@Entity @Data @NoArgsConstructor @AllArgsConstructor
+@Entity(name = "users")
+@Getter
+@Setter
+@NoArgsConstructor @AllArgsConstructor
 public class User {
 
     //@Id tells that the attribute below is id in the db table
@@ -30,4 +34,17 @@ public class User {
     //so when it loads the user it will also load all the roles in the db
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        User user = (User) o;
+        return id != null && Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

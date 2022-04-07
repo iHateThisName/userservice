@@ -23,7 +23,10 @@ import java.util.Optional;
 // @RequiredArgsConstructor from lombok and creates a constructor with the required arguments.
 // @Transactional tells spring that everything in this class is transactional.
 // @Slf4j a logger
-@Service @RequiredArgsConstructor @Transactional @Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional
+@Slf4j
 public class UserServiceImplementation implements UserService{
 
     private final UserRepository userRepository;
@@ -31,16 +34,20 @@ public class UserServiceImplementation implements UserService{
 
     @Override
     public User saveUser(User user) {
+        log.info("Saving new user {} to the database", user.getName());
         return userRepository.save(user);
     }
 
     @Override
     public Role saveRole(Role role) {
+        log.info("Saving new role {} to the database", role.getName());
         return roleRepository.save(role);
     }
 
     @Override
     public void addRoleToUser(String username, String roleName) throws RoleNotFoundException {
+        log.info("Adding role {} to user {}", roleName, username);
+
         User user = userRepository
                 .findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(
@@ -62,11 +69,15 @@ public class UserServiceImplementation implements UserService{
 
     @Override
     public Optional<User> getUser(String username) {
+
+        log.info("Fetching user {}", username);
         return userRepository.findByUsername(username);
     }
 
     @Override
     public List<User> getUsers() {
+
+        log.info("Fetching all users");
         return userRepository.findAll();
     }
 }
