@@ -45,7 +45,7 @@ public class UserServiceImplementation implements UserService{
     }
 
     @Override
-    public void addRoleToUser(String username, String roleName) throws RoleNotFoundException {
+    public void addRoleToUser(String username, String roleName) {
         log.info("Adding role {} to user {}", roleName, username);
 
         User user = userRepository
@@ -53,25 +53,18 @@ public class UserServiceImplementation implements UserService{
                 .orElseThrow(() -> new UsernameNotFoundException(
                         "Username " + username + " not found"));
 
-        Role newRole = roleRepository
-                .findByName(roleName)
-                .orElseThrow(() -> new RoleNotFoundException(
-                        "Role " + roleName + " not found"
-                ));
+        Optional<Role> role = roleRepository.findByName(roleName);
 
-        if (user.getRoles()
-                .stream()
-                .noneMatch(role -> role.equals(newRole))) {
+        user.getRoles().add(role.orElseThrow());
 
-            user.getRoles().add(newRole);
         }
-    }
+
 
     @Override
-    public Optional<User> getUser(String username) {
+    public User getUsers(String username) {
 
         log.info("Fetching user {}", username);
-        return userRepository.findByUsername(username);
+        return userRepository.findByUsername(username).orElseThrow();
     }
 
     @Override
