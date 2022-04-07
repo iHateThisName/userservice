@@ -9,61 +9,73 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class UserServiceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(UserServiceApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(UserServiceApplication.class, args);
+  }
 
-	@Bean
-	CommandLineRunner run(UserService userService) {
-		return args -> {
+  /**
+   * This method is called to decide what encryption to use for password checking
+   *
+   * @return The password encryptor
+   */
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder(10);
+  }
 
-			userService.saveRole(new Role(null, "ROLE_USER"));
-			userService.saveRole(new Role(null, "ROLE_MANAGER"));
-			userService.saveRole(new Role(null, "ROLE_ADMIN"));
+  @Bean
+  CommandLineRunner run(UserService userService) {
+    return args -> {
 
-			userService.saveUser(
-					new User(
-							null,
-							"John Travolta",
-							"john",
-							"1234",
-							new ArrayList<>()));
+      userService.saveRole(new Role(null, "ROLE_USER"));
+      userService.saveRole(new Role(null, "ROLE_MANAGER"));
+      userService.saveRole(new Role(null, "ROLE_ADMIN"));
 
-			userService.saveUser(
-					new User(
-							null,
-							"Will Smith",
-							"will",
-							"1234",
-							new ArrayList<>()));
+      userService.saveUser(
+          new User(
+              null,
+              "John Travolta",
+              "john",
+              "1234",
+              new ArrayList<>()));
 
-			userService.saveUser(
-					new User(
-							null,
-							"Jim Carry",
-							"jim",
-							"1234",
-							new ArrayList<>()));
+      userService.saveUser(
+          new User(
+              null,
+              "Will Smith",
+              "will",
+              "1234",
+              new ArrayList<>()));
 
-			userService.saveUser(
-					new User(
-							null,
-							"Arnold Schwarzenegger",
-							"arnold",
-							"1234",
-							new ArrayList<>()));
+      userService.saveUser(
+          new User(
+              null,
+              "Jim Carry",
+              "jim",
+              "1234",
+              new ArrayList<>()));
 
-			userService.addRoleToUser("john", "ROLE_USER");
-			userService.addRoleToUser("john", "ROLE_MANAGER");
-			userService.addRoleToUser("will", "ROLE_MANAGER");
-			userService.addRoleToUser("jim", "ROLE_ADMIN");
-			userService.addRoleToUser("arnold", "ROLE_ADMIN");
-			userService.addRoleToUser("arnold", "ROLE_USER");
-		};
-	}
+      userService.saveUser(
+          new User(
+              null,
+              "Arnold Schwarzenegger",
+              "arnold",
+              "1234",
+              new ArrayList<>()));
+
+      userService.addRoleToUser("john", "ROLE_USER");
+      userService.addRoleToUser("john", "ROLE_MANAGER");
+      userService.addRoleToUser("will", "ROLE_MANAGER");
+      userService.addRoleToUser("jim", "ROLE_ADMIN");
+      userService.addRoleToUser("arnold", "ROLE_ADMIN");
+      userService.addRoleToUser("arnold", "ROLE_USER");
+    };
+  }
 
 }
