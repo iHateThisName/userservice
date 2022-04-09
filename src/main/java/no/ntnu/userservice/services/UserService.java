@@ -1,11 +1,8 @@
 package no.ntnu.userservice.services;
 
+import java.util.List;
 import no.ntnu.userservice.models.Role;
 import no.ntnu.userservice.models.User;
-
-import javax.management.relation.RoleNotFoundException;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * @author "https://github.com/iHateThisName"
