@@ -1,9 +1,15 @@
 package no.ntnu.userservice.filter;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -95,11 +101,17 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         .withSubject(user.getUsername())
         .withExpiresAt(java.sql.Date.valueOf(LocalDate.now().plusWeeks(2)))
         .withIssuer(request.getRequestURL().toString())
-        .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
         .sign(algorithm);
 
-    response.setHeader("accessToken", accessToken);
-    response.setHeader("refreshToken", refreshToken);
+//    response.setHeader("accessToken", accessToken);
+//    response.setHeader("refreshToken", refreshToken);
+
+    Map<String, String> tokens = new HashMap<>();
+    tokens.put("accessToken", accessToken);
+    tokens.put("refreshToken", refreshToken);
+
+    response.setContentType(APPLICATION_JSON_VALUE);
+    new ObjectMapper().writeValue(response.getOutputStream(), tokens);
 
 
   }
